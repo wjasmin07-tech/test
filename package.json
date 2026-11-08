@@ -1,0 +1,16 @@
+{
+  "name": "drama-saju",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "드라마 캐릭터와 보는 사주 궁합 + 캐릭터 채팅",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.136.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

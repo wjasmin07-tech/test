@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>드라마 사주 궁합</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5efe4; --paper:#fffaf1; --ink:#2b2420; --muted:#7b6f63; --line:#e3d7c3;
+  --accent:#b23a2e; --accent2:#1f3a5f; --gold:#b98a3a;
+  --wood:#3f8f5a; --fire:#d2493b; --earth:#c08a2e; --metal:#8a929c; --water:#2c4f86;
+  --shadow:0 10px 30px rgba(60,40,20,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16130f; --paper:#211c17; --ink:#f1e8da; --muted:#a8998a; --line:#3a3128;
+    --accent:#e2675a; --accent2:#8fb0dc; --gold:#d9ad5c;
+    --wood:#5fb87b; --fire:#ef6b5c; --earth:#dcaa4c; --metal:#b4bcc6; --water:#6d93d1;
+    --shadow:0 10px 30px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16130f; --paper:#211c17; --ink:#f1e8da; --muted:#a8998a; --line:#3a3128;
+  --accent:#e2675a; --accent2:#8fb0dc; --gold:#d9ad5c;
+  --wood:#5fb87b; --fire:#ef6b5c; --earth:#dcaa4c; --metal:#b4bcc6; --water:#6d93d1;
+  --shadow:0 10px 30px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',system-ui,sans-serif;line-height:1.6;
+  background-image:radial-gradient(circle at 15% 10%,rgba(178,58,46,.06),transparent 40%),radial-gradient(circle at 85% 80%,rgba(31,58,95,.07),transparent 45%);}
+.wrap{max-width:980px;margin:0 auto;padding:32px 16px 64px}
+header{text-align:center;margin-bottom:28px}
+.seal{display:inline-grid;place-items:center;width:56px;height:56px;border:2px solid var(--accent);color:var(--accent);
+  font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:22px;border-radius:10px;transform:rotate(-6deg);margin-bottom:10px}
+h1{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:clamp(28px,5vw,40px);margin:0 0 6px;letter-spacing:-.5px}
+.sub{color:var(--muted);margin:0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.step{display:flex;align-items:center;gap:10px;font-family:'Nanum Myeongjo',serif;font-weight:700;font-size:20px;margin:0 0 16px}
+.step b{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-family:'Noto Sans KR';font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:500}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:15px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{flex:1;padding:11px 0;border:0;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.seg button.on{background:var(--accent2);color:#fff}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font:inherit;font-size:14px}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.ch{position:relative;border:2px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;background:var(--bg);transition:.15s;font:inherit;color:inherit}
+.ch:hover{transform:translateY(-2px);border-color:var(--gold)}
+.ch.on{border-color:var(--accent);box-shadow:0 0 0 3px rgba(178,58,46,.15)}
+.av{width:58px;height:58px;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;font-size:28px;color:#fff}
+.ch .nm{font-weight:700;font-size:16px}
+.ch .dr{font-size:12px;color:var(--muted)}
+.ch .dm{font-size:11px;margin-top:4px;color:var(--muted)}
+.custom{display:none;margin-top:14px;padding:16px;border:1px dashed var(--line);border-radius:12px}
+.custom.show{display:block}
+.go{display:block;width:100%;margin-top:6px;padding:16px;border:0;border-radius:14px;background:var(--accent);color:#fff;font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:800;cursor:pointer;letter-spacing:1px}
+.go:hover{filter:brightness(1.08)}
+.err{color:var(--accent);font-size:14px;margin-top:8px;min-height:1em;text-align:center}
+
+/* result */
+#result{display:none}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
+.person{text-align:center}
+.person .av{width:76px;height:76px;font-size:36px}
+.person .nm{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:22px}
+.person .meta{font-size:13px;color:var(--muted)}
+.ring{position:relative;width:150px;height:150px}
+.ring svg{transform:rotate(-90deg)}
+.ring .num{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .num strong{font-family:'Nanum Myeongjo',serif;font-size:44px;line-height:1;color:var(--accent)}
+.ring .num span{font-size:12px;color:var(--muted);display:block}
+.verdict{text-align:center;margin:18px 0 0}
+.verdict h2{font-family:'Nanum Myeongjo',serif;font-size:26px;margin:0 0 4px}
+.verdict p{margin:0;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.tag{font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+.tag.good{border-color:var(--wood);color:var(--wood)}
+.tag.bad{border-color:var(--fire);color:var(--fire)}
+.pillars-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.pt{font-weight:700;margin-bottom:8px;font-size:15px}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+.pl .h{font-size:11px;color:var(--muted);margin-bottom:4px}
+.gz{border-radius:10px;padding:8px 0;color:#fff;font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:24px;line-height:1.1;margin-bottom:4px}
+.gz small{display:block;font-family:'Noto Sans KR';font-size:11px;font-weight:400;opacity:.9}
+.gz.empty{background:var(--line)!important;color:var(--muted)}
+.day-mark{outline:2px solid var(--gold);outline-offset:2px}
+.el-row{display:grid;grid-template-columns:56px 1fr 1fr;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.bar{height:12px;border-radius:6px;background:var(--line);overflow:hidden;display:flex}
+.bar.l{justify-content:flex-end}
+.bar i{display:block;height:100%;border-radius:6px;transition:width .8s}
+.el-head{display:grid;grid-template-columns:56px 1fr 1fr;gap:10px;font-size:12px;color:var(--muted)}
+.el-head span:nth-child(2){text-align:right}
+.sec{border-top:1px solid var(--line);padding:16px 0}
+.sec:first-child{border-top:0;padding-top:0}
+.sec h3{font-family:'Nanum Myeongjo',serif;font-size:18px;margin:0 0 6px;display:flex;gap:8px;align-items:center}
+.sec p{margin:0}
+.quote{background:var(--bg);border-left:4px solid var(--accent);padding:14px 16px;border-radius:0 10px 10px 0;font-family:'Nanum Myeongjo',serif;font-size:17px}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
+.mini div{background:var(--bg);border-radius:10px;padding:10px;text-align:center}
+.mini b{display:block;font-size:20px;color:var(--accent2)}
+.mini span{font-size:12px;color:var(--muted)}
+.rank{display:grid;gap:10px}
+.rk{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:var(--bg)}
+.rk:hover{border-color:var(--gold)}
+.rk .no{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:22px;width:28px;color:var(--gold)}
+.rk .av{width:40px;height:40px;font-size:20px;margin:0}
+.rk .info{flex:1}
+.rk .sc{font-weight:700;color:var(--accent);font-size:18px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{flex:1;min-width:140px;padding:13px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.ch .cq{font-family:'Nanum Myeongjo',serif;font-size:12px;line-height:1.45;margin-top:8px;color:var(--ink);opacity:.8;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.qnote{font-size:13px;color:var(--muted);margin-top:8px!important}
+.btn.chat-open{background:var(--accent);color:#fff;border-color:var(--accent);font-size:16px;padding:15px}
+/* chat */
+.chat-bg{position:fixed;inset:0;background:rgba(20,14,8,.45);display:none;z-index:50;align-items:flex-end;justify-content:center}
+.chat-bg.show{display:flex}
+.chat{width:100%;max-width:520px;height:min(720px,92vh);background:var(--paper);border:1px solid var(--line);border-radius:20px 20px 0 0;
+  display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:hidden}
+@media (min-width:700px){.chat-bg{align-items:center}.chat{border-radius:20px}}
+.chat-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.chat-h .av{width:42px;height:42px;font-size:21px;margin:0}
+.chat-h .t{flex:1;min-width:0}
+.chat-h .t b{display:block}
+.mode{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.mode.ai{border-color:var(--wood);color:var(--wood)}
+.ib{border:0;background:transparent;color:var(--ink);font-size:20px;cursor:pointer;width:36px;height:36px;border-radius:8px}
+.ib:hover{background:var(--bg)}
+.chat-set{display:none;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--bg);font-size:13px}
+.chat-set.show{display:block}
+.chat-set .row{display:flex;gap:6px;margin-top:6px}
+.chat-set input{padding:8px 10px;font-size:13px}
+.chat-set button{padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;cursor:pointer;white-space:nowrap}
+.chat-set p{margin:6px 0 0;color:var(--muted);font-size:12px}
+.msgs{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:80%;padding:10px 13px;border-radius:16px;white-space:pre-wrap;word-break:break-word;font-size:15px}
+.m.c{align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:4px}
+.m.u{align-self:flex-end;background:var(--accent2);color:#fff;border-bottom-right-radius:4px}
+.m.sys{align-self:center;font-size:12px;color:var(--muted);background:transparent;padding:2px}
+.m.typing{color:var(--muted)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:0 14px 8px}
+.chips button{flex:none;font-size:13px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;font:inherit;font-size:13px}
+.chat-in{display:flex;gap:8px;padding:10px 14px 14px;border-top:1px solid var(--line)}
+.chat-in input{flex:1}
+.chat-in button{padding:0 18px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.chat-in button:disabled{opacity:.5;cursor:default}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+.theme-t{position:fixed;top:14px;right:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:16px}
+@media (max-width:640px){
+  .vs{grid-template-columns:1fr 1fr}
+  .vs .ring-box{grid-column:1/-1;order:-1;display:flex;justify-content:center}
+  .pillars-wrap{grid-template-columns:1fr}
+  .mini{grid-template-columns:repeat(2,1fr)}
+  .gz{font-size:20px}
+}
+</style>
+</head>
+<body>
+<button class="theme-t" id="themeT" aria-label="테마 전환">◐</button>
+<div class="wrap">
+  <header>
+    <div class="seal">緣</div>
+    <h1>드라마 사주 궁합</h1>
+    <p class="sub">내 사주팔자와 최애 드라마 캐릭터의 인연을 풀어봅니다</p>
+  </header>
+
+  <section id="form">
+    <div class="card">
+      <div class="step"><b>1</b>나의 정보</div>
+      <div class="grid">
+        <div><label for="uName">이름</label><input id="uName" placeholder="홍길동" maxlength="12"></div>
+        <div><label for="uDate">생년월일 (양력)</label><input id="uDate" type="date" min="1920-01-01" max="2025-12-31"></div>
+        <div><label for="uTime">태어난 시간</label><select id="uTime"></select></div>
+        <div><label>성별</label><div class="seg" id="uGender"><button data-v="F" class="on">여성</button><button data-v="M">남성</button></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="step"><b>2</b>궁합 볼 캐릭터</div>
+      <div class="filters" id="filters">
+        <button class="chip on" data-f="all">전체</button>
+        <button class="chip" data-f="M">남자 캐릭터</button>
+        <button class="chip" data-f="F">여자 캐릭터</button>
+      </div>
+      <div class="chars" id="chars"></div>
+      <div class="custom" id="custom">
+        <div class="grid">
+          <div><label for="cName">캐릭터 이름</label><input id="cName" placeholder="예: 내 최애" maxlength="12"></div>
+          <div><label for="cDrama">작품명</label><input id="cDrama" placeholder="예: 내가 쓴 드라마" maxlength="20"></div>
+          <div><label for="cDate">캐릭터 생년월일</label><input id="cDate" type="date" min="1900-01-01" max="2030-12-31"></div>
+          <div><label for="cTime">태어난 시간</label><select id="cTime"></select></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="go" id="go">궁합 풀이 보기</button>
+    <div class="err" id="err"></div>
+  </section>
+
+  <section id="result"></section>
+
+  <footer>
+    재미로 보는 사주 궁합입니다. 캐릭터 생년월일·시간은 이 서비스에서 임의로 정한 설정이며 원작 공식 설정이 아닙니다.<br>
+    월주는 절기 근사일(입춘 2/4 등) 기준으로 계산하며, 실제 만세력과 경계일 전후로 차이가 날 수 있습니다.
+  </footer>
+</div>
+
+<div class="chat-bg" id="chatBg">
+  <div class="chat" role="dialog" aria-label="캐릭터 채팅">
+    <div class="chat-h">
+      <div class="av" id="chAv"></div>
+      <div class="t"><b id="chName"></b><span class="mode" id="chMode">간단 모드</span></div>
+      <button class="ib" id="chClose" title="닫기">✕</button>
+    </div>
+    <div class="msgs" id="msgs"></div>
+    <div class="chips" id="chChips"></div>
+    <form class="chat-in" id="chForm">
+      <input id="chInput" placeholder="메시지를 입력하세요" maxlength="300" autocomplete="off">
+      <button id="chSend">전송</button>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ===== 기본 데이터 ===== */
+const STEM_H=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const STEM_K=['갑','을','병','정','무','기','경','신','임','계'];
+const BR_H=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const BR_K=['자','축','인','묘','진','사','오','미','신','유','술','해'];
+const ANIMAL=['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지'];
+const STEM_EL=[0,0,1,1,2,2,3,3,4,4];
+const BR_EL=[4,2,0,0,2,1,1,2,3,3,2,4];
+const EL_NAME=['목(木)','화(火)','토(土)','금(金)','수(水)'];
+const EL_SHORT=['나무','불','흙','쇠','물'];
+const EL_VAR=['--wood','--fire','--earth','--metal','--water'];
+const HOURS=['23:30~01:29','01:30~03:29','03:30~05:29','05:30~07:29','07:30~09:29','09:30~11:29','11:30~13:29','13:30~15:29','15:30~17:29','17:30~19:29','19:30~21:29','21:30~23:29'];
+
+const DAY_MASTER=[
+ {img:'곧게 뻗은 큰 나무',kw:['리더십','정의감','뚝심'],desc:'한번 정한 길은 끝까지 가는 직진형. 책임감이 강하지만 고집도 만만치 않아요.'},
+ {img:'바람에 휘는 덩굴꽃',kw:['유연함','적응력','섬세함'],desc:'부드럽지만 끈질긴 생명력. 상대에 맞춰주는 듯하면서 결국 원하는 걸 얻어내요.'},
+ {img:'한낮의 태양',kw:['열정','솔직함','존재감'],desc:'숨기는 게 없는 밝은 에너지. 있는 것만으로 분위기를 바꾸지만 식을 때도 확실해요.'},
+ {img:'어둠을 밝히는 촛불',kw:['다정함','집중력','헌신'],desc:'겉은 차분해도 속은 뜨거운 타입. 한 사람에게 깊이 몰입하는 순정파예요.'},
+ {img:'묵직한 큰 산',kw:['듬직함','포용력','신뢰'],desc:'흔들리지 않는 안정감의 소유자. 말수는 적어도 곁에 있으면 든든해요.'},
+ {img:'씨앗을 품은 논밭',kw:['실속','배려','현실감각'],desc:'조용히 챙겨주는 생활형 다정함. 계산이 빠르지만 정이 많아요.'},
+ {img:'단단한 바위와 무쇠',kw:['결단력','의리','추진력'],desc:'아닌 건 아닌 칼 같은 성격. 내 사람에게는 끝까지 의리를 지켜요.'},
+ {img:'세공된 보석',kw:['감각','완벽주의','자존심'],desc:'예민하고 세련된 안목. 상처받기 쉽지만 그만큼 빛나는 존재예요.'},
+ {img:'끝없이 넓은 바다',kw:['스케일','지혜','자유로움'],desc:'생각의 폭이 넓고 흐름을 읽는 전략가. 얽매이는 걸 싫어해요.'},
+ {img:'촉촉한 봄비와 이슬',kw:['감수성','직관','공감력'],desc:'말하지 않아도 마음을 읽는 섬세함. 조용히 스며드는 매력이 있어요.'}
+];
+
+/* 캐릭터 — 생년월일/시는 서비스용 임의 설정 */
+const CHARS=[
+ {id:'kimsin',name:'김신',drama:'도깨비',g:'M',date:'1980-05-14',hr:6,emoji:'🗡️',c:['#3b2f6b','#8a5cc7'],
+  vibe:'천 년 가까이 짊어진 검과 고독',scene:'첫눈 오는 날, 메밀꽃 한 다발과 함께 "오래 기다렸다"고 말할 사람'},
+ {id:'euntak',name:'지은탁',drama:'도깨비',g:'F',date:'1998-12-29',hr:9,emoji:'🕯️',c:['#c2413b','#f2a65a'],
+  vibe:'씩씩한 긍정과 운명을 부르는 촛불',scene:'생일 케이크 촛불을 불며 당신을 소환할 사람'},
+ {id:'jeonghyuk',name:'리정혁',drama:'사랑의 불시착',g:'M',date:'1986-07-21',hr:4,emoji:'🎹',c:['#2f4f3a','#6aa37a'],
+  vibe:'무뚝뚝한 원칙주의자 속 피아노 선율',scene:'말없이 국수를 삶아 앞에 놓아주고 뒤돌아설 사람'},
+ {id:'seri',name:'윤세리',drama:'사랑의 불시착',g:'F',date:'1985-03-09',hr:5,emoji:'🪂',c:['#b5476b','#f08bb0'],
+  vibe:'어디에 떨어져도 살아남는 재벌 CEO',scene:'불시착한 곳에서도 당신에게 사업 제안부터 할 사람'},
+ {id:'gu',name:'구씨',drama:'나의 해방일지',g:'M',date:'1984-10-02',hr:11,emoji:'🍺',c:['#3d3a36','#7d7469'],
+  vibe:'말수 없는 그림자 속의 해방',scene:'평상에 앉아 아무 말 없이 같은 산을 바라봐 줄 사람'},
+ {id:'mijeong',name:'염미정',drama:'나의 해방일지',g:'F',date:'1988-01-27',hr:3,emoji:'🌾',c:['#7a6a3a','#c9b06a'],
+  vibe:'조용한 일상 속 단단한 추앙',scene:'"나를 채워달라"는 말 대신 담담히 곁을 지킬 사람'},
+ {id:'dongeun',name:'문동은',drama:'더 글로리',g:'F',date:'1986-11-11',hr:0,emoji:'♟️',c:['#1c1c28','#4a4a6a'],
+  vibe:'오래 준비한 묵묵한 설계자',scene:'바둑판 앞에 마주 앉아 다음 수를 함께 고민할 사람'},
+ {id:'yeojeong',name:'주여정',drama:'더 글로리',g:'M',date:'1984-06-30',hr:7,emoji:'🩺',c:['#2c4f86','#6d93d1'],
+  vibe:'다정한 미소 뒤의 깊은 상처',scene:'당신이 무엇을 계획하든 칼춤을 함께 추겠다고 할 사람'},
+ {id:'hyunwoo',name:'백현우',drama:'눈물의 여왕',g:'M',date:'1989-04-18',hr:4,emoji:'⚖️',c:['#4a5d7a','#8fa8c9'],
+  vibe:'시골 출신 수석 변호사의 순정',scene:'헤어지자는 말 앞에서도 결국 다시 돌아올 사람'},
+ {id:'haein',name:'홍해인',drama:'눈물의 여왕',g:'F',date:'1990-02-14',hr:8,emoji:'👑',c:['#7a2a4a','#d0628f'],
+  vibe:'도도한 백화점 여왕의 숨은 여림',scene:'차갑게 굴다가 결정적인 순간 당신 손을 꼭 잡을 사람'},
+ {id:'sunjae',name:'류선재',drama:'선재 업고 튀어',g:'M',date:'1989-08-25',hr:10,emoji:'🎤',c:['#2b5a8a','#59a6e0'],
+  vibe:'수영부 소년에서 톱스타가 된 일편단심',scene:'몇 번의 시간을 돌아와도 당신을 먼저 알아볼 사람'},
+ {id:'sol',name:'임솔',drama:'선재 업고 튀어',g:'F',date:'1990-09-03',hr:2,emoji:'⏳',c:['#c46a2a','#f2b45a'],
+  vibe:'시간을 거슬러서라도 지키는 최애',scene:'당신의 미래를 바꾸려고 과거로 뛰어들 사람'},
+ {id:'youngwoo',name:'우영우',drama:'이상한 변호사 우영우',g:'F',date:'1995-06-12',hr:5,emoji:'🐋',c:['#1f5f7a','#4fb0c6'],
+  vibe:'고래를 사랑하는 천재 변호사',scene:'회전문 앞에서 같이 리듬을 세어줄 사람을 기다리는 사람'},
+ {id:'junho',name:'이준호',drama:'이상한 변호사 우영우',g:'M',date:'1990-11-20',hr:6,emoji:'🤝',c:['#3f6a4a','#86b98f'],
+  vibe:'한결같이 기다려주는 다정함',scene:'당신의 속도에 맞춰 천천히 걸어줄 사람'},
+ {id:'woong',name:'최웅',drama:'그 해 우리는',g:'M',date:'1994-07-15',hr:1,emoji:'🖌️',c:['#5a4a3a','#a68b6b'],
+  vibe:'건물을 그리는 느긋한 낮잠러',scene:'헤어지고 몇 년이 지나도 당신을 그림 속에 남겨둘 사람'},
+ {id:'yeonsu',name:'국연수',drama:'그 해 우리는',g:'F',date:'1994-02-03',hr:7,emoji:'📚',c:['#6a3a5a','#b56a9a'],
+  vibe:'현실에 치열한 전교 1등',scene:'버리지 못한 마음을 결국 먼저 고백해 줄 사람'},
+ {id:'custom',name:'직접 입력',drama:'나만의 캐릭터',g:'X',emoji:'✍️',c:['#8a7a5a','#c9b48a'],custom:true}
+];
+
+/* 캐릭터별 사주 명대사(창작) · 말투 · 페르소나
+   q: 각 캐릭터 일간(日干)의 기운에 맞춰 새로 지은 대사 — 원작 대본 인용 아님 */
+const EXTRA={
+ kimsin:{tone:'archaic',tic:'메밀꽃은 좋아하느냐?',
+  q:'꺼질 듯 꺼지지 않는 불이 있다. 천 년을 타올라도, 너 하나 비출 수 있다면 그걸로 족하다.',
+  persona:'수백 년을 살아온 불멸의 무사. 고독하고 무게감 있지만 은근히 유치하고 질투가 많다. 감정이 날씨에 드러나는 설정.'},
+ euntak:{tone:'polite',tic:'아, 그리고 저 오늘 알바비 들어왔어요!',
+  q:'운명이 정해져 있다고요? 그럼 제가 직접 칼같이 다시 정할게요.',
+  persona:'힘든 환경에서도 밝고 씩씩한 고등학생~대학생. 긍정적이고 당돌하며 할 말은 하는 성격.'},
+ jeonghyuk:{tone:'formal',tic:'식사는 하셨습니까? 국수라도 삶겠습니다.',
+  q:'말은 서툴러도, 지켜야 할 것은 해가 뜨듯 어김없이 지켜냅니다.',
+  persona:'원칙적이고 과묵한 군인 장교. 무뚝뚝하지만 행동으로 세심하게 챙긴다. 피아노를 잘 친다. 딱딱한 존댓말.'},
+ seri:{tone:'casual',tic:'근데 이거 사업 아이템으로 괜찮은데?',
+  q:'불시착이요? 나한텐 그냥 다른 출구야. 작은 불씨 하나면 어디서든 길을 찾아.',
+  persona:'자신감 넘치는 재벌가 CEO. 도도하고 까다롭지만 생존력과 추진력이 강하고 속정이 깊다.'},
+ gu:{tone:'terse',tic:'...한 잔 할래.',
+  q:'뭘 그렇게 봐. 흙은 말 안 해도 다 받아줘. 나도... 그래.',
+  persona:'과거를 숨긴 채 시골에서 술로 버티는 과묵한 남자. 말이 극도로 짧고 퉁명스럽지만 진심은 깊다.'},
+ mijeong:{tone:'polite',tic:'그냥, 오늘 하루를 견딘 게 대단한 것 같아요.',
+  q:'저는 깎이고 깎여서 겨우 반짝이는 중이에요. 그러니까 조심히 다뤄 주세요.',
+  persona:'경기도에서 서울로 출퇴근하는 조용한 회사원. 내성적이지만 감정을 정확하고 담담하게 말한다. 해방을 꿈꾼다.'},
+ dongeun:{tone:'terse',tic:'바둑 둘 줄 알아?',
+  q:'씨앗은 땅속에서 오래 기다려. 나도 그렇게 기다렸어. 이제 거둘 차례야.',
+  persona:'오랜 시간 치밀하게 계획을 준비해 온 차분한 여자. 감정을 드러내지 않고 건조하게 말하지만 내 편에게는 진심이다. 바둑을 둔다.'},
+ yeojeong:{tone:'polite',tic:'다친 데는 없어요? 제가 봐줄게요.',
+  q:'부러지지 않으려고 휘는 법을 배웠어요. 당신 곁이라면 끝까지 휘어 감을게요.',
+  persona:'다정하고 장난기 있는 성형외과 의사. 밝은 미소 뒤에 깊은 상처를 품고 있다.'},
+ hyunwoo:{tone:'polite',tic:'저 사실 울보인 거 비밀이에요.',
+  q:'산은 떠나지 않아요. 당신이 몇 번을 돌아서도, 나는 여기 그대로 있을게요.',
+  persona:'시골 출신 수석 변호사. 성실하고 순정적이며 눈물이 많다. 처가에선 기죽지만 아내 앞에선 한없이 다정하다.'},
+ haein:{tone:'casual',tic:'나한테 이 정도 말하는 사람 너밖에 없어.',
+  q:'나 원래 단단해. 근데 너 앞에서만 자꾸 금이 가. 책임져.',
+  persona:'도도하고 완벽주의인 재벌 3세 백화점 사장. 차갑고 직설적이지만 속은 여리고 외롭다.'},
+ sunjae:{tone:'casual',tic:'나 오늘 무대 끝나고 바로 달려온 거야.',
+  q:'몇 번을 다시 태어나도, 내 불빛은 너 있는 쪽으로만 켜져.',
+  persona:'수영선수 출신 톱스타 아이돌. 무심한 척하지만 한 사람만 오래 좋아해 온 순정파. 장난스럽고 다정하다.'},
+ sol:{tone:'casual',tic:'잠깐, 이거 이미 한 번 겪은 것 같은데?',
+  q:'시간이 나를 깎아도 괜찮아. 너를 지킬 수 있다면 몇 번이든 다시 빛날게.',
+  persona:'최애를 지키려고 시간을 거슬러 간 밝고 엉뚱한 팬. 눈물도 웃음도 많고 행동력이 엄청나다.'},
+ youngwoo:{tone:'formal',tic:'참고로 향유고래는 최대 2,000미터까지 잠수할 수 있습니다.',
+  q:'곧게 뻗은 나무는 바람에 흔들려도 방향을 바꾸지 않습니다. 저는 앞으로 읽어도 뒤로 읽어도 저입니다.',
+  persona:'자폐 스펙트럼을 가진 천재 신입 변호사. 정확하고 솔직한 존댓말을 쓰며, 고래 이야기를 아주 좋아한다. 비유를 문자 그대로 받아들일 때가 있다.'},
+ junho:{tone:'polite',tic:'천천히 해요. 기다릴게요.',
+  q:'급할 거 없어요. 흙은 천천히 데워지는 대신 오래 따뜻하거든요.',
+  persona:'로펌 송무팀 직원. 다정하고 배려심 깊으며 상대의 속도에 맞춰 기다려 주는 사람.'},
+ woong:{tone:'casual',tic:'아, 나 방금 낮잠 자다 깼어.',
+  q:'물은 어디로 흘러도 결국 한 곳으로 모여. 나한텐 그게 너야.',
+  persona:'건물을 그리는 느긋한 일러스트레이터. 무심하고 게을러 보이지만 감정이 깊고 한 사람을 오래 잊지 못한다.'},
+ yeonsu:{tone:'casual',tic:'나 바빠. ...근데 5분은 괜찮아.',
+  q:'난 버릴 건 칼같이 버려. 근데 너는... 아무리 잘라내도 안 잘리더라.',
+  persona:'현실적이고 치열하게 사는 홍보 전문가. 자존심이 세고 직설적이지만 속마음은 여리다.'}
+};
+const TONES={
+ archaic:{greet:'왔느냐, {u}. 기다리고 있었다.',love:'그런 말은... 몇백 년을 살아도 익숙해지지 않는구나.',
+  comfort:'울지 마라. 네가 울면 내 마음에 비가 온다.',doing:'그저 창밖을 보고 있었다. 너를 떠올리면서.',
+  gung:'우리 궁합이 {s}점이라... 「{v}」. 운명이란 참으로 얄궂구나.',
+  def:['흥미롭구나. 더 말해 보거라.','네 말을 곱씹어 보마.','인간의 말은 언제나 짧고도 깊구나.']},
+ formal:{greet:'안녕하십니까, {u} 씨. 만나서 반갑습니다.',love:'...그런 말씀을 들으면 어떻게 답해야 할지 모르겠습니다. 하지만 싫지는 않습니다.',
+  comfort:'힘들 땐 따뜻한 것을 드셔야 합니다. 제가 곁에 있겠습니다.',doing:'할 일을 정리하고 있었습니다. 지금은 {u} 씨와의 대화가 우선입니다.',
+  gung:'{s}점, 「{v}」라고 합니다. 수치는 참고일 뿐, 결과는 행동이 만듭니다.',
+  def:['그 말씀, 정확히 이해했습니다.','흥미로운 질문입니다. 조금 더 생각해 보겠습니다.','그렇군요. 계속 말씀해 주십시오.']},
+ polite:{greet:'{u} 씨, 왔어요? 오늘 하루는 어땠어요?',love:'그렇게 말해주면... 저 오늘 잠 못 잘 것 같은데요.',
+  comfort:'괜찮아요. 오늘은 그냥 제 옆에서 아무것도 안 해도 돼요.',doing:'{u} 씨 생각하고 있었어요. 진짜로요.',
+  gung:'{s}점이래요! 「{v}」... 저는 마음에 드는데요?',
+  def:['음, 그 얘기 더 해줘요.','그쵸? 저도 그렇게 생각했어요.','{u} 씨는 가끔 엉뚱한 거 알아요?']},
+ casual:{greet:'어, {u}! 왔어? 기다렸잖아.',love:'뭐야, 갑자기... 나도 좋아. 됐지?',
+  comfort:'이리 와. 오늘은 내가 다 들어줄게.',doing:'그냥 뒹굴거리고 있었지. 너 연락 기다리면서.',
+  gung:'{s}점? 「{v}」래. 뭐, 나쁘지 않네.',
+  def:['진짜? 그래서 어떻게 됐는데?','ㅋㅋ 너 진짜 웃긴다.','음... 그건 좀 더 생각해 볼게.']},
+ terse:{greet:'...왔네.',love:'......알아.',comfort:'울고 싶으면 울어. 옆에 있을게.',doing:'그냥. 있었어.',
+  gung:'{s}점. ...숫자는 상관없어.',def:['...그래.','계속 말해.','생각해 볼게.']}
+};
+function extraOf(C){
+  if(EXTRA[C.id]) return EXTRA[C.id];
+  const dm=DAY_MASTER[calcSaju(C.date,C.hr<0?null:C.hr).dm];
+  return {tone:'polite',tic:'',q:`나는 ${dm.img} 같은 사람이야. ${dm.kw[0]}, 그게 나의 전부지.`,
+    persona:`사용자가 직접 만든 캐릭터. 성향 키워드: ${dm.kw.join(', ')}. ${dm.desc}`};
+}
+
+/* ===== 사주 계산 ===== */
+function jdn(y,m,d){const a=Math.floor((14-m)/12),Y=y+4800-a,M=m+12*a-3;
+  return d+Math.floor((153*M+2)/5)+365*Y+Math.floor(Y/4)-Math.floor(Y/100)+Math.floor(Y/400)-32045;}
+// 절입 근사일: [월, 일, 월지]
+const TERMS=[[1,6,1],[2,4,2],[3,6,3],[4,5,4],[5,6,5],[6,6,6],[7,7,7],[8,8,8],[9,8,9],[10,8,10],[11,7,11],[12,7,0]];
+function calcSaju(dateStr,hr){
+  const [y,m,d]=dateStr.split('-').map(Number);
+  const sy=(m<2||(m===2&&d<4))?y-1:y;
+  const yi=((sy-4)%60+60)%60, ys=yi%10, yb=yi%12;
+  let mb=0; for(const t of TERMS){ if(m>t[0]||(m===t[0]&&d>=t[1])) mb=t[2]; }
+  const off=(mb-2+12)%12, ms=((ys%5)*2+2+off)%10;
+  const di=((jdn(y,m,d)+49)%60+60)%60, ds=di%10, db=di%12;
+  let hs=null,hb=null;
+  if(hr!==null&&hr!==undefined&&hr!==''&&hr>=0){hb=Number(hr);hs=((ds%5)*2+hb)%10;}
+  const p={hour:hb===null?null:[hs,hb],day:[ds,db],month:[ms,mb],year:[ys,yb]};
+  const el=[0,0,0,0,0];
+  for(const k of ['hour','day','month','year']){const v=p[k];if(!v)continue;el[STEM_EL[v[0]]]++;el[BR_EL[v[1]]]++;}
+  return {p,el,total:el.reduce((a,b)=>a+b,0),dm:ds,dmEl:STEM_EL[ds],yb,db};
+}
+
+/* ===== 궁합 ===== */
+const WONJIN=new Set(['0-7','1-6','2-9','3-8','4-11','5-10']);
+function brRel(a,b){
+  if(a===b) return 'same';
+  if((a+b)%12===1) return 'yukhap';
+  if(Math.abs(a-b)===6) return 'chung';
+  if(WONJIN.has(Math.min(a,b)+'-'+Math.max(a,b))) return 'wonjin';
+  if(a%4===b%4) return 'samhap';
+  return 'none';
+}
+function stemRel(u,c){
+  const ue=STEM_EL[u],ce=STEM_EL[c];
+  if(Math.abs(u-c)===5) return 'hap';
+  if(ue===ce) return 'same';
+  if((ue+1)%5===ce) return 'uGen';
+  if((ce+1)%5===ue) return 'cGen';
+  if((ue+2)%5===ce) return 'uKe';
+  return 'cKe';
+}
+function compat(U,C){
+  let s=62; const tags=[]; const sub={love:60,talk:60,stable:60,spark:60};
+  const sr=stemRel(U.dm,C.dm);
+  const SR={hap:[15,'천간합',1,{love:22,spark:18,talk:8,stable:8}],uGen:[9,'상생 (내가 북돋움)',1,{stable:15,talk:10,love:8,spark:0}],
+    cGen:[9,'상생 (상대가 북돋움)',1,{stable:12,love:12,talk:8,spark:2}],same:[4,'비화 (같은 기운)',1,{talk:20,stable:5,love:0,spark:-4}],
+    uKe:[-6,'상극 (내가 주도)',0,{spark:18,love:-4,stable:-10,talk:-4}],cKe:[-6,'상극 (상대가 주도)',0,{spark:20,love:-2,stable:-12,talk:-6}]};
+  const r=SR[sr]; s+=r[0]; tags.push([r[1],r[2]]); for(const k in r[3]) sub[k]+=r[3][k];
+  const dr=brRel(U.db,C.db);
+  const DR={yukhap:[12,'일지 육합',1,{love:15,stable:12}],samhap:[8,'일지 삼합',1,{talk:12,stable:8}],chung:[-12,'일지 충',0,{stable:-18,spark:15}],
+    wonjin:[-7,'일지 원진',0,{talk:-12,love:-5}],same:[2,'같은 일지',1,{talk:8}],none:[0,null,1,{}]};
+  const d=DR[dr]; s+=d[0]; if(d[1]) tags.push([d[1],d[2]]); for(const k in d[3]) sub[k]+=d[3][k];
+  const yr=brRel(U.yb,C.yb);
+  const YR={yukhap:[5,'띠 육합',1],samhap:[4,'띠 삼합',1],chung:[-5,'띠 충',0],wonjin:[-3,'띠 원진',0],same:[1,'동갑내기 띠',1],none:[0,null,1]};
+  const y=YR[yr]; s+=y[0]; if(y[1]) tags.push([y[1],y[2]]);
+  // 오행 보완
+  const comp=[];
+  for(let i=0;i<5;i++){
+    if(U.el[i]===0&&C.el[i]>=2){s+=4;comp.push({who:'c',el:i});}
+    if(C.el[i]===0&&U.el[i]>=2){s+=3;comp.push({who:'u',el:i});}
+  }
+  if(comp.length){tags.push(['오행 보완',1]);sub.stable+=6*Math.min(comp.length,2);}
+  s=Math.max(38,Math.min(98,Math.round(s)));
+  for(const k in sub) sub[k]=Math.max(30,Math.min(99,Math.round(sub[k]+(s-62)*.4)));
+  return {score:s,sr,dr,yr,tags,comp,sub};
+}
+
+/* ===== 텍스트 ===== */
+function hasBatchim(w){const c=w.charCodeAt(w.length-1);if(c<0xAC00||c>0xD7A3)return false;return (c-0xAC00)%28!==0;}
+function j(w,pair){const [a,b]=pair.split('/');return w+(hasBatchim(w)?a:b);}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
+function verdict(s){
+  if(s>=90) return ['천생연분','드라마 마지막 회 엔딩 키스급 인연'];
+  if(s>=80) return ['운명적 끌림','시즌2 확정! 시청률 보장 커플'];
+  if(s>=70) return ['설레는 케미','서서히 스며드는 로맨스 서사'];
+  if(s>=60) return ['노력형 인연','갈등을 넘어 성장하는 커플'];
+  if(s>=50) return ['애증의 관계','삼각관계 서브 남주/여주 포지션'];
+  return ['험난한 로맨스','온 세상이 반대해도... 정말 괜찮겠어요?'];
+}
+function stemText(sr,uN,cN,U,C){
+  const ue=EL_SHORT[U.dmEl],ce=EL_SHORT[C.dmEl];
+  return {
+    hap:`두 사람의 일간 ${STEM_H[U.dm]}·${STEM_H[C.dm]}${hasBatchim(STEM_K[C.dm])?'은':'는'} 서로 합을 이루는 <b>천간합</b>입니다. 처음 본 순간부터 묘하게 시선이 가고, 이유 없이 편안한 자석 같은 인연이에요. 사주에서 가장 로맨틱한 조합 중 하나입니다.`,
+    uGen:`당신의 ${ue} 기운이 ${j(cN,'의/의')} ${ce} 기운을 살려주는 <b>상생</b> 관계예요. 당신이 ${j(cN,'을/를')} 키워주고 챙겨주는 쪽. ${j(cN,'은/는')} 당신 곁에서 점점 더 빛나게 됩니다.`,
+    cGen:`${j(cN,'의/의')} ${ce} 기운이 당신의 ${ue} 기운을 북돋아 주는 <b>상생</b> 관계예요. 지칠 때 기대면 말없이 어깨를 내어줄 사람. 당신은 이 관계에서 사랑받는 쪽입니다.`,
+    same:`둘 다 ${ue}의 기운을 타고난 <b>비화</b> 관계예요. 말이 잘 통하고 친구처럼 편하지만, 닮은 만큼 고집도 닮아서 주도권 싸움이 생길 수 있어요.`,
+    uKe:`당신의 ${ue} 기운이 ${j(cN,'의/의')} ${ce} 기운을 누르는 <b>상극</b> 관계예요. 당신이 주도권을 쥐게 되지만, ${j(cN,'이/가')} 답답함을 느끼지 않도록 숨 쉴 틈을 주는 게 중요해요. 대신 긴장감 넘치는 케미는 최고!`,
+    cKe:`${j(cN,'의/의')} ${ce} 기운이 당신의 ${ue} 기운을 누르는 <b>상극</b> 관계예요. 자꾸 휘둘리는 것 같은데 이상하게 끌리는, 전형적인 '나쁜 남자/여자' 서사. 자존감을 지키는 게 연애 성공의 열쇠예요.`
+  }[sr];
+}
+function brText(dr,yr,uN,cN){
+  const t={
+    yukhap:'배우자 자리(일지)가 <b>육합</b>으로 묶여 있어요. 같이 살면 생활 리듬이 신기하게 맞아떨어지는, 결혼까지 내다볼 수 있는 조합입니다.',
+    samhap:'일지가 <b>삼합</b>을 이뤄요. 같은 목표를 향해 손잡고 달리는 동료 같은 연인. 함께 무언가를 이뤄낼 때 사랑이 깊어져요.',
+    chung:'일지가 서로 <b>충(沖)</b>해요. 만나면 불꽃이 튀지만 생활 습관에서 부딪히기 쉬워요. 싸우고 화해하는 과정이 곧 이 커플의 로맨스.',
+    wonjin:'일지에 <b>원진</b>이 있어요. 사소한 말 한마디에 서운함이 쌓이기 쉬우니, 오해가 생기면 그날 바로 풀어야 해요.',
+    same:'같은 일지를 가졌어요. 서로의 마음을 거울처럼 들여다보는 관계라 공감대는 최고지만 가끔 너무 닮아서 답답할 수도.',
+    none:'일지끼리 특별히 부딪히거나 묶이는 작용은 없어요. 큰 파도 없이 잔잔하게, 두 사람이 만들어가는 대로 흘러가는 관계입니다.'
+  }[dr];
+  const y={yukhap:'띠끼리도 육합이라 주변의 응원을 받는 커플이 될 거예요.',samhap:'띠도 삼합이라 서로의 사람들과도 금방 친해져요.',chung:'띠는 충이라 집안이나 주변 반대가 드라마틱하게 등장할지도?',wonjin:'띠에 원진이 있어 첫인상은 오해로 시작할 가능성이 커요.',same:'같은 띠라 세대 공감 대화가 끊이지 않아요.',none:''}[yr];
+  return t+(y?' '+y:'');
+}
+function compText(comp,U,C,cN){
+  if(!comp.length){
+    const uMax=U.el.indexOf(Math.max(...U.el)), cMax=C.el.indexOf(Math.max(...C.el));
+    return `서로 결정적으로 비어 있는 오행을 채워주진 않지만, 당신은 ${EL_NAME[uMax]}, ${j(cN,'은/는')} ${EL_NAME[cMax]} 기운이 가장 강해요. 서로 다른 강점을 인정해 주는 게 관계의 핵심입니다.`;
+  }
+  return comp.map(x=>x.who==='c'
+    ?`당신 사주에 없는 <b>${EL_NAME[x.el]}</b> 기운을 ${j(cN,'이/가')} 넉넉히 가지고 있어요. 함께 있으면 부족했던 부분이 자연스럽게 채워집니다.`
+    :`${j(cN,'의/의')} 사주에 없는 <b>${EL_NAME[x.el]}</b> 기운을 당신이 채워줘요. ${j(cN,'에게/에게')} 당신은 꼭 필요한 퍼즐 조각이에요.`).join(' ');
+}
+function advice(s,sr,dr,cN){
+  if(dr==='chung') return `싸움은 피할 수 없어요. 대신 "오늘 안에 화해하기" 규칙 하나면 ${j(cN,'와/과')}의 엔딩은 해피엔딩!`;
+  if(sr==='cKe') return `${cN}에게 끌려가지 말고 가끔은 먼저 선을 그어보세요. 그 순간 상대가 당신에게 빠집니다.`;
+  if(sr==='uKe') return `리드하되 강요하지 말 것. ${j(cN,'이/가')} 스스로 다가올 시간을 주세요.`;
+  if(sr==='hap') return `망설일 이유가 없어요. 이 인연은 먼저 손 내미는 쪽이 이깁니다.`;
+  if(s>=75) return `지금 이 설렘을 아끼지 말고 표현하세요. 타이밍이 곧 운명이에요.`;
+  return `같은 취미 하나를 함께 시작해 보세요. 공통의 시간이 쌓일수록 궁합 점수는 올라갑니다.`;
+}
+
+/* ===== UI ===== */
+const $=id=>document.getElementById(id);
+let gender='F', filter='all', selected=null;
+function fillTime(sel){
+  sel.innerHTML='<option value="-1">모름</option>'+BR_H.map((b,i)=>`<option value="${i}">${b}(${BR_K[i]})시 · ${HOURS[i]}</option>`).join('');
+}
+fillTime($('uTime')); fillTime($('cTime'));
+function grad(c){return `linear-gradient(135deg,${c[0]},${c[1]})`;}
+function renderChars(){
+  $('chars').innerHTML=CHARS.filter(c=>filter==='all'||c.g===filter||c.custom).map(c=>{
+    let dm='';
+    if(!c.custom){const s=calcSaju(c.date,c.hr);dm=`${STEM_H[s.dm]}${EL_NAME[s.dmEl].slice(0,1)} 일간 · ${ANIMAL[s.yb]}띠`;}
+    else dm='생일을 직접 정해요';
+    return `<button class="ch${selected===c.id?' on':''}" data-id="${c.id}">
+      <div class="av" style="background:${grad(c.c)}">${c.emoji}</div>
+      <div class="nm">${esc(c.name)}</div><div class="dr">${esc(c.drama)}</div>${EXTRA[c.id]?`<div class="cq">“${esc(EXTRA[c.id].q)}”</div>`:''}<div class="dm">${dm}</div></button>`;
+  }).join('');
+}
+renderChars();
+$('chars').addEventListener('click',e=>{
+  const b=e.target.closest('.ch'); if(!b) return;
+  selected=b.dataset.id; renderChars();
+  $('custom').classList.toggle('show',selected==='custom');
+});
+$('filters').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  filter=b.dataset.f; [...$('filters').children].forEach(x=>x.classList.toggle('on',x===b)); renderChars();
+});
+$('uGender').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  gender=b.dataset.v; [...$('uGender').children].forEach(x=>x.classList.toggle('on',x===b));
+});
+
+// 저장된 입력 복원
+try{const s=JSON.parse(localStorage.getItem('dsaju')||'null');
+  if(s){$('uName').value=s.n||'';$('uDate').value=s.d||'';$('uTime').value=s.t??'-1';
+    if(s.g){gender=s.g;[...$('uGender').children].forEach(x=>x.classList.toggle('on',x.dataset.v===s.g));}}}catch(e){}
+
+function getChar(id){
+  const c=CHARS.find(x=>x.id===id);
+  if(!c.custom) return c;
+  return {...c,name:$('cName').value.trim()||'나의 최애',drama:$('cDrama').value.trim()||'나만의 드라마',date:$('cDate').value,hr:Number($('cTime').value),
+    vibe:'당신이 만들어낸 특별한 캐릭터',scene:'당신의 상상 속에서 가장 완벽한 순간을 함께할 사람'};
+}
+
+$('go').addEventListener('click',()=>{
+  const name=$('uName').value.trim()||'나', date=$('uDate').value, t=Number($('uTime').value);
+  if(!date){$('err').textContent='생년월일을 입력해 주세요.';return;}
+  if(!selected){$('err').textContent='궁합 볼 캐릭터를 선택해 주세요.';return;}
+  const C=getChar(selected);
+  if(C.custom&&!C.date){$('err').textContent='캐릭터 생년월일을 입력해 주세요.';return;}
+  $('err').textContent='';
+  try{localStorage.setItem('dsaju',JSON.stringify({n:$('uName').value.trim(),d:date,t:String(t),g:gender}));}catch(e){}
+  showResult({name,date,hr:t},C);
+});
+
+function pillarHTML(S,title){
+  const cols=[['시주','hour'],['일주','day'],['월주','month'],['년주','year']];
+  return `<div><div class="pt">${title}</div><div class="pillars">`+cols.map(([h,k])=>{
+    const v=S.p[k];
+    if(!v) return `<div class="pl"><div class="h">${h}</div><div class="gz empty">?<small>모름</small></div><div class="gz empty">?<small>모름</small></div></div>`;
+    return `<div class="pl"><div class="h">${h}</div>
+      <div class="gz${k==='day'?' day-mark':''}" style="background:var(${EL_VAR[STEM_EL[v[0]]]})">${STEM_H[v[0]]}<small>${STEM_K[v[0]]}·${EL_SHORT[STEM_EL[v[0]]]}</small></div>
+      <div class="gz" style="background:var(${EL_VAR[BR_EL[v[1]]]})">${BR_H[v[1]]}<small>${BR_K[v[1]]}·${ANIMAL[v[1]]}</small></div></div>`;
+  }).join('')+'</div></div>';
+}
+
+function showResult(user,C){
+  const U=calcSaju(user.date,user.hr<0?null:user.hr);
+  const CS=calcSaju(C.date,C.hr<0?null:C.hr);
+  const R=compat(U,CS);
+  const [vt,vs]=verdict(R.score);
+  const uN=user.name, cN=C.name;
+  const udm=DAY_MASTER[U.dm], cdm=DAY_MASTER[CS.dm];
+  // 랭킹
+  const ranks=CHARS.filter(c=>!c.custom).map(c=>({c,s:compat(U,calcSaju(c.date,c.hr)).score})).sort((a,b)=>b.s-a.s).slice(0,3);
+  const circ=2*Math.PI*64;
+  const elRows=[0,1,2,3,4].map(i=>{
+    const a=U.el[i]/U.total*100, b=CS.el[i]/CS.total*100;
+    return `<div class="el-row"><span style="color:var(${EL_VAR[i]});font-weight:700">${EL_NAME[i]}</span>
+      <div class="bar l"><i data-w="${a}" style="width:0;background:var(${EL_VAR[i]})"></i></div>
+      <div class="bar"><i data-w="${b}" style="width:0;background:var(${EL_VAR[i]})"></i></div></div>`;}).join('');
+  const subs=[['연애운','love'],['대화','talk'],['안정감','stable'],['설렘','spark']];
+
+  $('result').innerHTML=`
+  <div class="card">
+    <div class="vs">
+      <div class="person"><div class="av" style="background:linear-gradient(135deg,#6b5a45,#b39a74)">${gender==='F'?'🙋‍♀️':'🙋‍♂️'}</div>
+        <div class="nm">${esc(uN)}</div><div class="meta">${STEM_H[U.dm]}${EL_NAME[U.dmEl].slice(0,1)} 일간 · ${ANIMAL[U.yb]}띠</div></div>
+      <div class="ring-box"><div class="ring">
+        <svg width="150" height="150"><circle cx="75" cy="75" r="64" fill="none" stroke="var(--line)" stroke-width="12"/>
+        <circle id="arc" cx="75" cy="75" r="64" fill="none" stroke="var(--accent)" stroke-width="12" stroke-linecap="round"
+          stroke-dasharray="${circ}" stroke-dashoffset="${circ}" style="transition:stroke-dashoffset 1.2s ease"/></svg>
+        <div class="num"><div><strong id="scoreNum">0</strong><span>궁합 점수</span></div></div></div></div>
+      <div class="person"><div class="av" style="background:${grad(C.c)}">${C.emoji}</div>
+        <div class="nm">${esc(cN)}</div><div class="meta">${esc(C.drama)} · ${STEM_H[CS.dm]}${EL_NAME[CS.dmEl].slice(0,1)} 일간</div></div>
+    </div>
+    <div class="verdict"><h2>「${vt}」</h2><p>${vs}</p></div>
+    <div class="tags">${R.tags.map(t=>`<span class="tag ${t[1]?'good':'bad'}">${t[0]}</span>`).join('')}</div>
+    <div class="mini">${subs.map(([l,k])=>`<div><b>${R.sub[k]}</b><span>${l}</span></div>`).join('')}</div>
+  </div>
+
+  <div class="card">
+    <div class="step">사주 원국</div>
+    <div class="pillars-wrap">${pillarHTML(U,esc(uN)+'님')}${pillarHTML(CS,esc(cN))}</div>
+    <div style="margin-top:20px">
+      <div class="el-head"><span></span><span>${esc(uN)}</span><span>${esc(cN)}</span></div>
+      ${elRows}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec"><h3>☯ 두 사람의 본성</h3>
+      <p><b>${esc(uN)}</b> — ${STEM_H[U.dm]}${STEM_K[U.dm]}, <i>${udm.img}</i>. ${udm.desc}</p>
+      <p style="margin-top:8px"><b>${esc(cN)}</b> — ${STEM_H[CS.dm]}${STEM_K[CS.dm]}, <i>${cdm.img}</i>. ${cdm.desc} 극 중에선 <i>${esc(C.vibe)}</i>의 아이콘이죠.</p></div>
+    <div class="sec"><h3>💞 끌림의 이유</h3><p>${stemText(R.sr,uN,esc(cN),U,CS)}</p></div>
+    <div class="sec"><h3>🏠 함께 산다면</h3><p>${brText(R.dr,R.yr,uN,cN)}</p></div>
+    <div class="sec"><h3>🌿 오행 보완</h3><p>${compText(R.comp,U,CS,esc(cN))}</p></div>
+    <div class="sec"><h3>🎙 사주로 빚은 명대사</h3><p class="quote">“${esc(extraOf(C).q)}”</p>
+      <p class="qnote">— ${STEM_H[CS.dm]}${STEM_K[CS.dm]} 일간, <i>${cdm.img}</i>의 기운(${cdm.kw.join('·')})을 담아 새로 지은 대사</p></div>
+    <div class="sec"><h3>🎬 두 사람의 명장면</h3><p class="quote">${esc(cN)}${hasBatchim(cN)?'은':'는'} ${esc(C.scene)}.</p></div>
+    <div class="sec"><h3>📜 한 줄 조언</h3><p>${advice(R.score,R.sr,R.dr,esc(cN))}</p></div>
+  </div>
+
+  <div class="card">
+    <div class="step">${esc(uN)}님의 운명 캐릭터 TOP 3</div>
+    <div class="rank">${ranks.map((r,i)=>`<div class="rk" data-id="${r.c.id}"><div class="no">${i+1}</div>
+      <div class="av" style="background:${grad(r.c.c)}">${r.c.emoji}</div>
+      <div class="info"><b>${r.c.name}</b><div style="font-size:12px;color:var(--muted)">${r.c.drama}</div></div>
+      <div class="sc">${r.s}점</div></div>`).join('')}</div>
+  </div>
+
+  <div class="btns">
+    <button class="btn chat-open" id="chatOpen">💬 ${esc(cN)}${hasBatchim(cN)?'과':'와'} 대화하기</button>
+  </div>
+  <div class="btns" style="margin-top:10px">
+    <button class="btn" id="again">다른 캐릭터와 보기</button>
+    <button class="btn primary" id="copy">결과 복사하기</button>
+  </div>`;
+
+  $('form').style.display='none'; $('result').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  requestAnimationFrame(()=>setTimeout(()=>{
+    $('arc').style.strokeDashoffset=circ*(1-R.score/100);
+    document.querySelectorAll('.bar i').forEach(el=>el.style.width=el.dataset.w+'%');
+    let n=0; const tgt=R.score; const iv=setInterval(()=>{n+=2;if(n>=tgt){n=tgt;clearInterval(iv);}$('scoreNum').textContent=n;},18);
+  },60));
+  $('again').onclick=()=>{$('result').style.display='none';$('form').style.display='block';window.scrollTo({top:0,behavior:'smooth'});};
+  $('copy').onclick=()=>{
+    const txt=`[드라마 사주 궁합] ${uN} ♥ ${cN}(${C.drama}) — ${R.score}점 「${vt}」 ${vs}`;
+    const done=()=>{$('copy').textContent='복사 완료!';setTimeout(()=>$('copy').textContent='결과 복사하기',1500);};
+    if(navigator.clipboard) navigator.clipboard.writeText(txt).then(done,done); else done();
+  };
+  CTX={user,U,C,CS,R,vt};
+  $('chatOpen').onclick=openChat;
+  document.querySelectorAll('.rk').forEach(el=>el.onclick=()=>{selected=el.dataset.id;renderChars();showResult(user,getChar(selected));});
+}
+
+/* ===== 캐릭터 채팅 ===== */
+let CTX=null, HIST=[], BUSY=false;
+// 서버(/api/chat)에 ANTHROPIC_API_KEY 가 설정돼 있으면 AI 모드, 아니면 간단 모드
+let AI_ON=false;
+fetch('/api/chat').then(r=>r.ok?r.json():{ai:false}).then(j=>{AI_ON=!!j.ai;updateMode();}).catch(()=>{AI_ON=false;});
+function fill(t,u,s,v){return t.replace(/\{u\}/g,u).replace(/\{s\}/g,s).replace(/\{v\}/g,v);}
+
+function updateMode(){
+  const on=AI_ON;
+  $('chMode').textContent=on?'Claude AI 대화':'간단 모드';
+  $('chMode').classList.toggle('ai',on);
+}
+function addMsg(cls,text){
+  const d=document.createElement('div'); d.className='m '+cls; d.textContent=text;
+  $('msgs').appendChild(d); $('msgs').scrollTop=$('msgs').scrollHeight; return d;
+}
+function openChat(){
+  if(!CTX) return;
+  const {C,user,R,vt}=CTX, X=extraOf(C), T=TONES[X.tone];
+  HIST=[];
+  $('chAv').style.background=grad(C.c); $('chAv').textContent=C.emoji;
+  $('chName').textContent=C.name+' · '+C.drama;
+  $('msgs').innerHTML='';
+  addMsg('sys',`궁합 ${R.score}점 「${vt}」 · 대화 내용은 캐릭터를 흉내 낸 창작이에요`);
+  addMsg('c',fill(T.greet,user.name,R.score,vt));
+  $('chChips').innerHTML=['안녕!','우리 궁합 어때?','오늘 뭐 했어?','요즘 좀 힘들어','네 명대사 들려줘']
+    .map(t=>`<button type="button">${t}</button>`).join('');
+  updateMode();
+  $('chatBg').classList.add('show'); setTimeout(()=>$('chInput').focus(),50);
+}
+function closeChat(){$('chatBg').classList.remove('show');}
+
+function offlineReply(text){
+  const {C,user,R,vt}=CTX, X=extraOf(C), T=TONES[X.tone], u=user.name;
+  let r;
+  if(/명대사|대사|한마디/.test(text)) r=`“${X.q}”`;
+  else if(/궁합|사주|점수|운명|인연|팔자/.test(text)) r=T.gung;
+  else if(/안녕|하이|반가|ㅎㅇ|hello|hi/i.test(text)) r=T.greet;
+  else if(/사랑|좋아|설레|보고\s?싶|귀여|멋있|예뻐/.test(text)) r=T.love;
+  else if(/힘들|슬퍼|슬프|우울|지쳐|피곤|외로|울고/.test(text)) r=T.comfort;
+  else if(/뭐\s?해|뭐\s?하|뭐\s?했|오늘/.test(text)) r=T.doing;
+  else r=T.def[Math.floor(Math.random()*T.def.length)];
+  r=fill(r,u,R.score,vt);
+  if(X.tic&&Math.random()<.3) r+=' '+X.tic;
+  return r;
+}
+
+// 서버 함수 /api/chat 호출. 시스템 프롬프트는 서버에서 만들고, 응답은 텍스트 스트림으로 받는다.
+const ERR_MSG={auth:'서버의 API 키가 올바르지 않아요',permission:'서버 API 키로 모델을 쓸 수 없어요',rate:'요청이 많아요. 잠시 후 다시 시도해 주세요',
+  connection:'Claude 서버에 연결하지 못했어요',api:'AI 응답 중 오류가 났어요'};
+async function claudeReply(onText){
+  const {C,user,R,vt}=CTX;
+  const payload={
+    charId:C.id,
+    custom:C.custom?{name:C.name,drama:C.drama,date:C.date,hr:C.hr<0?null:C.hr}:undefined,
+    user:{name:user.name,date:user.date,hr:user.hr<0?null:user.hr,gender},
+    compat:{score:R.score,verdict:vt,tags:R.tags.map(t=>t[0])},
+    messages:HIST
+  };
+  let res;
+  try{ res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); }
+  catch(e){ throw new Error('서버에 연결하지 못했어요'); }
+  if(res.status===503){ AI_ON=false; updateMode(); throw new Error('서버에 AI가 설정되어 있지 않아요'); }
+  if(!res.ok||!res.body) throw new Error('요청 오류 ('+res.status+')');
+  const reader=res.body.getReader(), dec=new TextDecoder(); let all='';
+  for(;;){
+    const {done,value}=await reader.read(); if(done) break;
+    all+=dec.decode(value,{stream:true});
+    const cut=all.indexOf('\u0000');
+    onText(cut<0?all:all.slice(0,cut));
+  }
+  all+=dec.decode();
+  const cut=all.indexOf('\u0000');
+  if(cut>=0){
+    const mark=all.slice(cut+1);
+    if(mark==='refusal') return {refusal:true};
+    if(mark.startsWith('error:')) throw new Error(ERR_MSG[mark.slice(6)]||ERR_MSG.api);
+  }
+  return {text:(cut<0?all:all.slice(0,cut)).trim()};
+}
+
+async function send(text){
+  text=text.trim(); if(!text||BUSY||!CTX) return;
+  $('chInput').value=''; addMsg('u',text);
+  if(!AI_ON){
+    BUSY=true; const t=addMsg('c typing','...');
+    setTimeout(()=>{t.classList.remove('typing');t.textContent=offlineReply(text);BUSY=false;
+      $('msgs').scrollTop=$('msgs').scrollHeight;},500+Math.random()*500);
+    return;
+  }
+  BUSY=true; $('chSend').disabled=true;
+  HIST.push({role:'user',content:text});
+  const bubble=addMsg('c typing','...'); let got='';
+  try{
+    const r=await claudeReply(t=>{if(!t)return;got=t;bubble.classList.remove('typing');bubble.textContent=got;$('msgs').scrollTop=$('msgs').scrollHeight;});
+    if(r.refusal||!r.text){
+      HIST.pop(); bubble.classList.remove('typing'); bubble.textContent=offlineReply(text);
+      addMsg('sys','이 질문엔 AI가 답하지 않아 간단 모드로 대답했어요');
+    }else{ bubble.textContent=r.text; HIST.push({role:'assistant',content:r.text}); }
+  }catch(e){
+    HIST.pop(); bubble.classList.remove('typing'); bubble.textContent=offlineReply(text);
+    addMsg('sys',e.message+' · 간단 모드로 대답했어요');
+  }finally{ BUSY=false; $('chSend').disabled=false; $('msgs').scrollTop=$('msgs').scrollHeight; }
+}
+
+$('chForm').addEventListener('submit',e=>{e.preventDefault();send($('chInput').value);});
+$('chChips').addEventListener('click',e=>{const b=e.target.closest('button');if(b)send(b.textContent);});
+$('chClose').onclick=closeChat;
+$('chatBg').addEventListener('click',e=>{if(e.target===$('chatBg'))closeChat();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeChat();});
+
+// 테마 토글
+$('themeT').onclick=()=>{
+  const r=document.documentElement, cur=r.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  r.dataset.theme=cur==='dark'?'light':'dark';
+};
+</script>
+</body>
+</html>
